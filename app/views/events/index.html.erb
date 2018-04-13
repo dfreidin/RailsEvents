@@ -20,7 +20,7 @@
                 <td><%= e.user.first_name %></td>
                 <td>
                     <% if e.user == @user %>
-                        <a href="/events/<%= e.id %>" data-method="delete">Delete</a>
+                        <a href="/events/<%= e.id %>/edit">Edit</a>/<a href="/events/<%= e.id %>" data-method="delete">Delete</a>
                     <% else %>
                         <% unless e.attendees.exists?(@user.id) %><a href="/events/<%= e.id %>/join" data-method="patch">Join</a>
                         <% else %>Joining <a href="/events/<%= e.id %>/join" data-method="delete">Cancel</a>
@@ -51,7 +51,7 @@
                 <td><%= e.user.first_name %></td>
                 <td>
                     <% if e.user == @user %>
-                        <a href="/events/<%= e.id %>" data-method="delete">Delete</a>
+                        <a href="/events/<%= e.id %>/edit">Edit</a>/<a href="/events/<%= e.id %>" data-method="delete">Delete</a>
                     <% else %>
                         <% unless e.attendees.exists?(@user.id) %><a href="/events/<%= e.id %>/join" data-method="patch">Join</a>
                         <% else %>Joining <a href="/events/<%= e.id %>/join" data-method="delete">Cancel</a>

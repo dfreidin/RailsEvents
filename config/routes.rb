@@ -9,7 +9,11 @@ Rails.application.routes.draw do
 
   delete 'events/:id/join' => 'events#leave'
 
-  patch 'events/:id' => 'events#comment'
+  get 'events/:id/edit' => 'events#edit'
+
+  patch 'events/:id' => 'events#update'
+
+  post 'events/:id/comment' => 'events#comment'
 
   delete 'events/:id' => 'events#destroy'
 

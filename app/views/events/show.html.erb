@@ -28,8 +28,7 @@
     <p><%= c.user.first_name %> says: <%= c.comment %></p>
 <% end %>
 <h5>Add Comment</h5>
-<%= form_for :comment do |f| %>
-    <%= form_tag("/events/#{@event.id}", method: "patch") %>
+<%= form_for :comment, url:"/events/#{@event.id}/comment"  do |f| %>
     <%= f.text_area :comment %>
     <p><%= submit_tag "Submit Comment" %></p>
 <% end %>

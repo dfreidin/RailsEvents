@@ -1,0 +1,12 @@
+<h1>Edit Event</h1>
+<p><a href="/events">Events Dashboard</a>  <a href="/user/logout">Logout</a></p>
+<%= form_for @event, url: "/events/#{@event.id}" do |f| %>
+    <p>Name: <%= f.text_field :name %></p>
+    <p>Date: <%= f.date_field :date %></p>
+    <%= f.fields_for @event.location do |l| %>
+        <p>Location: <%= l.text_field :city %>
+            <%= l.select :state, options_for_select(Decoder::Countries[:US].states.keys.zip(Decoder::Countries[:US].states.keys).sort) %>
+        </p>
+    <% end %>
+    <p><%= submit_tag "Update Event" %>
+<% end %>

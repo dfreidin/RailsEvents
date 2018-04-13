@@ -1,7 +1,8 @@
 class EventsController < ApplicationController
 
   before_action :set_current_user
-  before_action :set_event, only: [:show, :join, :leave, :comment, :destroy]
+  before_action :set_event, only: [:show, :join, :leave, :comment, :destroy, :edit, :update]
+  before_action :verify_user_for_editing, only: [:edit, :update]
 
   def index
   end
@@ -11,8 +12,10 @@ class EventsController < ApplicationController
     @comments = @event.comments.includes(:user)
   end
 
+  def edit
+  end
+
   def create
-    puts "loc_params: #{loc_params.inspect}"
     @loc = Location.find_or_create_by(loc_params)
     @event = Event.new(event_params)
     @event.location = @loc
@@ -22,6 +25,13 @@ class EventsController < ApplicationController
       flash[:error] = @event.errors.full_messages
     end
     redirect_to "/events"
+  end
+
+  def update
+    @loc = Location.find_or_create_by(loc_params)
+    @event.update(event_params)
+    @event.update(location: @loc)
+    redirect_to "/events/#{@event.id}"
   end
 
   def destroy
@@ -69,5 +79,8 @@ class EventsController < ApplicationController
   end
   def loc_params
     params.require(:event).require(:location).permit(:city, :state)
+  end
+  def verify_user_for_editing
+    redirect_to "/events" unless @event.user == @user
   end
 end
