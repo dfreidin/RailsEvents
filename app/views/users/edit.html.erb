@@ -1,0 +1,13 @@
+<h1>Edit Your Profile</h1>
+<p><a href="/events">Events Dashboard</a>  <a href="/user/logout">Logout</a></p>
+<%= form_for @user, url: "/user/#{@user.id}" do |f| %>
+    <p>First Name: <%= f.text_field :first_name %></p>
+    <p>Last Name: <%= f.text_field :last_name %></p>
+    <p>Email: <%= f.text_field :email %></p>
+    <%= f.fields_for @user.location do |l| %>
+        <p>Location: <%= l.text_field :city %>
+            <%= l.select(:state, options_for_select(Decoder::Countries[:US].states.keys.zip(Decoder::Countries[:US].states.keys).sort)) %>
+        </p>
+    <% end %>
+    <p><%= submit_tag "Update Records" %>
+<% end %>

@@ -1,0 +1,75 @@
+<h1>Welcome, <%= @user.first_name %></h1>
+<p><a href="/user/<%= @user.id %>">Edit My Profile</a>  <a href="/user/logout">Logout</a></p>
+<h3>Here are some of the events at your state:</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Location</th>
+            <th>Host</th>
+            <th>Action/Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @in_state_events.each do |e| %>
+            <tr>
+                <td><a href="/events/<%= e.id %>"><%= e.name %></a></td>
+                <td><%= e.date_display %></td>
+                <td><%= e.location.city %>, <%= e.location.state %></td>
+                <td><%= e.user.first_name %></td>
+                <td>
+                    <% if e.user == @user %>
+                        <a href="/events/<%= e.id %>" data-method="delete">Delete</a>
+                    <% else %>
+                        <% unless e.attendees.exists?(@user.id) %><a href="/events/<%= e.id %>/join" data-method="patch">Join</a>
+                        <% else %>Joining <a href="/events/<%= e.id %>/join" data-method="delete">Cancel</a>
+                        <% end %>
+                    <% end %>
+                </td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>
+<h3>Here are some of the events at other states:</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Location</th>
+            <th>Host</th>
+            <th>Action/Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @out_of_state_events.each do |e| %>
+            <tr>
+                <td><a href="/events/<%= e.id %>"><%= e.name %></a></td>
+                <td><%= e.date_display %></td>
+                <td><%= e.location.city %>, <%= e.location.state %></td>
+                <td><%= e.user.first_name %></td>
+                <td>
+                    <% if e.user == @user %>
+                        <a href="/events/<%= e.id %>" data-method="delete">Delete</a>
+                    <% else %>
+                        <% unless e.attendees.exists?(@user.id) %><a href="/events/<%= e.id %>/join" data-method="patch">Join</a>
+                        <% else %>Joining <a href="/events/<%= e.id %>/join" data-method="delete">Cancel</a>
+                        <% end %>
+                    <% end %>
+                </td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>
+<h3>Add Event</h3>
+<%= form_for :event, url: "/events" do |f| %>
+    <p>Name: <%= f.text_field :name %></p>
+    <p>Date: <%= f.date_field :date %></p>
+    <%= f.fields_for :location do |l| %>
+        <p>Location: <%= l.text_field :city %>
+            <%= l.select :state, options_for_select(Decoder::Countries[:US].states.keys.zip(Decoder::Countries[:US].states.keys).sort) %>
+        </p>
+    <% end %>
+    <p><%= submit_tag "Add Event" %>
+<% end %>

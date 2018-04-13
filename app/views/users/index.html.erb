@@ -1,0 +1,24 @@
+<h1>Welcome!</h1>
+<hr>
+<h2>Register</h2>
+<%= form_for :user, url: "/user" do |f| %>
+    <p>First Name: <%= f.text_field :first_name %></p>
+    <p>Last Name: <%= f.text_field :last_name %></p>
+    <p>Email: <%= f.text_field :email %></p>
+    <%= f.fields_for :location do |l| %>
+        <p>Location: <%= l.text_field :city %>
+            <%= l.select(:state, options_for_select(Decoder::Countries[:US].states.keys.zip(Decoder::Countries[:US].states.keys).sort)) %>
+        </p>
+    <% end %>
+    <p>Password: <%= f.password_field :password %></p>
+    <p>*Password should be at least 8 characters</p>
+    <p>Confirm PW: <%= f.password_field :password_confirmation %></p>
+    <p><%= submit_tag "Register" %>
+<% end %>
+<hr>
+<h2>Login</h2>
+<%= form_for :user, url: "/user/login" do |f| %>
+    <p>Email: <%= f.text_field :email %></p>
+    <p>Password: <%= f.password_field :password %></p>
+    <p><%= submit_tag "Login" %>
+<% end %>

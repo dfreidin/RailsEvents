@@ -1,0 +1,35 @@
+<h1><%= @event.name %></h1>
+<p><a href="/events">Events Dashboard</a>  <a href="/user/logout">Logout</a></p>
+<p>Host: <%= @event.user.first_name %> <%= @event.user.last_name %></p>
+<p>Date: <%= @event.date_display %></p>
+<p>Location: <%= @event.location.city %>, <%= @event.location.state %></p>
+<p>People who are joining the event: <%= @event.attendees.size %></p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Location</th>
+            <th>State</th>
+        <tr>
+    </thead>
+    <tbody>
+        <% @attendees.each do |u| %>
+            <tr>
+                <td><%= u.first_name %> <%= u.last_name %></td>
+                <td><%= u.location.city %></td>
+                <td><%= u.location.state %></td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>
+<hr>
+<h3>Discussion about this event:</h3>
+<% @comments.each do |c| %>
+    <p><%= c.user.first_name %> says: <%= c.comment %></p>
+<% end %>
+<h5>Add Comment</h5>
+<%= form_for :comment do |f| %>
+    <%= form_tag("/events/#{@event.id}", method: "patch") %>
+    <%= f.text_area :comment %>
+    <p><%= submit_tag "Submit Comment" %></p>
+<% end %>
